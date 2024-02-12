@@ -1,18 +1,22 @@
 package main
 
 import (
-    "fmt"
-    "log"
-    "os"
-    "net/http"
+	"database/sql"
+	"log"
+	"net/http"
+	"os"
+	"fmt"
 
-    _ "github.com/lib/pq"
-    "github.com/joho/godotenv"
+	"github.com/go-chi/cors"
+	"github.com/joho/godotenv"
+	_ "github.com/lib/pq"
     "github.com/go-chi/chi/v5"
-    "github.com/go-chi/cors"
     "github.com/GnarlyLasagna/go-blog-aggregator/internal/database"
 )
 
+type apiConfig struct {
+	DB *database.Queries
+}
 
 func main() {
 
@@ -24,7 +28,7 @@ func main() {
 	}
 
     dbURL := os.Getenv("DB_URL")
-	if DbURL == "" {
+	if dbURL == "" {
 		log.Fatal("Database URL is not found in the environment")
 	}
 
@@ -38,7 +42,6 @@ func main() {
 		DB: db,
 	}
 
-	go startScraping(db, 10, time.Minute)
 
 	router := chi.NewRouter()
 
@@ -65,7 +68,7 @@ func main() {
 	}
 
 	log.Printf("server starting on %v", portString)
-	err := srv.ListenAndServe()
+	err = srv.ListenAndServe()
 	if err != nil {
 		log.Fatal(err)
 	}
