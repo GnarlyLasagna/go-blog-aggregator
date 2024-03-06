@@ -24,11 +24,6 @@ For executing migrations I used [goose](https://github.com/pressly/goose) while 
 goose postgres postgres://user:password@host:port/database up
 ```
 
-you can use the CONN variable in the env file
-```
-goose postgres CONN up
-```
-
 
 
 or in the root dir:
